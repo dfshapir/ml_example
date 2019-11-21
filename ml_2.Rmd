@@ -10,7 +10,7 @@ knitr::opts_chunk$set(echo = FALSE)
 library(fs)
 library(tidymodels)
 library(tidyverse)
-
+library(yardstick)
 ```
 
 ## Predicting Democratic Votes
@@ -78,7 +78,7 @@ clean <- raw_data %>%
 # All of this is relatively simple because there is only one independent
 # variable in the model and the dependent variable only has two levels.
 
-model_1 <- glm(data = clean, dvote ~ gender, family = "binomial")
+model_1 <- glm(data = clean, dvote ~ gender + party, family = "binomial")
 
 x_1 <- clean %>% 
   mutate(prediction = predict(model_1, type = "response")) %>% 
@@ -86,6 +86,11 @@ x_1 <- clean %>%
 
 ```
 
+```{r}
+metrics(data = x_1, truth = dvote, estimate = pred_dvote)
+
+# kap -- in this case, kap shows how much better you did than a random model. Accuracy gives the percentage that the estimator correctly predicts the output. You can change out predictor variables (party, gender + party, etc.) and run the same code.
+```
 
 
 
